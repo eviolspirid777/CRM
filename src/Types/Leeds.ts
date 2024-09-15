@@ -13,7 +13,8 @@ export type LeadDataLite = {
     name: string,
     price: number,
     closest_task_at?: string | number,
-    color?: string
+    color?: string,
+    bgcolor?: string
 }
 
 type LeadData = {

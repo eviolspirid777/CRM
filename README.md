@@ -1,29 +1,12 @@
 # crm
-https://eviolspirid.amocrm.ru/todo/line/?skip_filter=Y&useFilter=y&sel=115673554
-log:
-pass:
+Приложение для тест-проекта
 
-## Project setup
+## Установка
 ```
 npm install
 ```
 
-### Compiles and hot-reloads for development
+### Запуск на локальном сервере
 ```
 npm run serve
 ```
-
-### Compiles and minifies for production
-```
-npm run build
-```
-
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
-
-

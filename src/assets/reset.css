@@ -1,0 +1,63 @@
+/* Сброс всех стилей */
+
+/* 1. Убираем все отступы и поля */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* 2. Сброс для всех элементов */
+html, body {
+    height: 100%;
+    font-family: Arial, sans-serif;
+    background-color: rgb(19,34,48);
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+ol, ul {
+    list-style: none;
+}
+
+table {
+    border-collapse: collapse;
+}
+
+input, textarea, select, button {
+    font-family: inherit;
+    font-size: inherit;
+}
+
+/* 3. Сброс для заголовков */
+h1, h2, h3, h4, h5, h6 {
+    margin: 0;
+}
+
+/* 4. Убираем стандартные отступы для форм */
+button {
+    border: none;
+    background: none;
+    cursor: pointer;
+}
+
+/* 5. Общее правило для очистки отступов */
+.clearfix::after {
+    content: "";
+    clear: both;
+    display: table;
+}
+
+/* 6. Убираем стандартные стили для столбцов */
+td, th {
+    padding: 0;
+    border: none;
+}
