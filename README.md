@@ -1,4 +1,7 @@
 # crm
+https://eviolspirid.amocrm.ru/todo/line/?skip_filter=Y&useFilter=y&sel=115673554
+log:
+pass:
 
 ## Project setup
 ```
@@ -22,3 +25,5 @@ npm run lint
 
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
+
+
