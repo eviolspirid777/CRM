@@ -26,8 +26,8 @@ import moment from "moment"
 import CardLeed from "@/components/CardLeed.vue"
 
 const leeds = ref<Leed | object>({})
-const cardData = ref<LeadDataLite[] | object[]>([])
-const previousId = ref<null | number>(null)
+const cardData = ref<LeadDataLite[] | undefined>(undefined)
+const selectedCardId = ref<null | number>(null);
 const tableRerender = ref(false)
 
 const columns = ref([
@@ -86,86 +86,35 @@ const fetchDataById = async (id: number) => {
 }
 
 const selectCard = async (id: number) => {
-  console.log(id)
-  if (previousId.value === null) {
-    previousId.value = id;
-
-    // Используем Promise.all для асинхронного получения данных
-    const updatedCardData = await Promise.all(cardData.value.map(async (el) => {
-      if (el.id === previousId.value && previousId.value) {
-        let { closest_task_at } = await fetchDataById(previousId.value) as LeadDataLite;
-
-        closest_task_at = moment.unix(closest_task_at as number).format("DD.MM.YYYY");
-
-        const currentDate = moment().startOf('day');
-        let closest_task = moment(closest_task_at, "DD.MM.YYYY").startOf('day');
-
-        const compareResult = currentDate.isBefore(closest_task) 
-          ? 'before' 
-          : currentDate.isSame(closest_task, 'day') 
-          ? 'same' 
-          : 'after';
-
-        let color = '';
-        switch (compareResult) {
-          case 'before':
-            color = "#f3756d";
-            break;
-          case 'same':
-            color = "#58b98f";
-            break;
-          case 'after':
-            color = "#ffd710";
-            break;
-        }
-        console.log(closest_task_at, color);
-        return { ...el, color: color, closest_task_at: closest_task_at };
-      }
-      return el; // Возвращаем элемент без изменений, если id не совпадает
-    }));
-
-    cardData.value = updatedCardData; // Обновляем значения cardData
-    tableRerender.value = !tableRerender.value;
-
+  if (selectedCardId.value === id) {
+    selectedCardId.value = null; 
   } else {
-    // Аналогично, обрабатываем и вторую ветку
-    const updatedCardData = await Promise.all(cardData.value.map(async (el) => {
-      if (el.id === previousId.value) {
-        return { ...el, closest_task_at: null, color: "" };
-      }
+    selectedCardId.value = id; 
+  }
 
-      let { closest_task_at } = await fetchDataById(previousId.value) as LeadDataLite;
+  const updatedCardData = await Promise.all(cardData.value.map(async (el) => {
+    if (el.id === selectedCardId.value) {
+      let { closest_task_at } = await fetchDataById(selectedCardId.value) as LeadDataLite;
       closest_task_at = moment.unix(closest_task_at as number).format("DD.MM.YYYY");
 
       const currentDate = moment().startOf('day');
       let closest_task = moment(closest_task_at, "DD.MM.YYYY").startOf('day');
 
-      const compareResult = currentDate.isBefore(closest_task) 
-        ? 'before' 
+      let color = currentDate.isBefore(closest_task) 
+        ? "#f3756d" 
         : currentDate.isSame(closest_task, 'day') 
-        ? 'same' 
-        : 'after';
+        ? "#58b98f" 
+        : "#ffd710";
 
-      let color = '';
-      switch (compareResult) {
-        case 'before':
-          color = "#f3756d";
-          break;
-        case 'same':
-          color = "#58b98f";
-          break;
-        case 'after':
-          color = "#ffd710";
-          break;
-      }
-      console.log(closest_task_at, color);
-      return { ...el, color: color, closest_task_at: closest_task_at };
-    }));
+      return { ...el, color, closest_task_at };
+    } else {
+      return { ...el, closest_task_at: null, color: "" };
+    }
+  }));
 
-    cardData.value = updatedCardData;
-    tableRerender.value = !tableRerender.value;
-  }
-}
+  cardData.value = updatedCardData;
+  tableRerender.value = !tableRerender.value;
+};
 
 
 const fillCardData = () => {
@@ -173,7 +122,7 @@ const fillCardData = () => {
   (leeds.value as Leed)._embedded.leads.forEach(el => {
     let { name, id, price } = el;
 
-    cardData.value.push({ name, id, price });
+    cardData.value!.push({ name, id, price });
   });
 };
 
